@@ -1,0 +1,13 @@
+{
+    "name": "hardhat-dapp-hello-world",
+    "private": true,
+    "workspaces": {
+        "packages": [
+            "backend",
+            "client"
+        ],
+        "nohoist": [
+            "client/**"
+        ]
+    }
+}

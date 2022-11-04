@@ -1,0 +1,86 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Hardhat NextJS CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  prepare-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.17.1'
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install Deps
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --immutable --immutable-cache --check-cache
+
+  backend:
+    runs-on: ubuntu-latest
+    needs: prepare-dependencies
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.17.1'
+    - uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Run Compile
+      run: yarn workspace backend compile
+    - name: Upload types
+      uses: actions/upload-artifact@master
+      with:
+        name: typechain-types
+        path: backend/typechain-types
+    - name: Contract Test
+      run: yarn workspace backend test
+    - name: Contract Coverage
+      run: yarn workspace backend coverage
+    - name: Start Hardhat node
+      run: yarn workspace backend start
+    - name: Deploy contract
+      run: yarn workspace backend deploy
+
+  client:
+    runs-on: ubuntu-latest
+    needs: [prepare-dependencies, backend]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: typechain-types
+          path: backend/typechain-types
+      - name: Cache
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Build
+        uses: actions/setup-node@v2
+      - run: yarn workspace client build
