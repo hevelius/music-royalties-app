@@ -8,7 +8,7 @@
     "clean": "yarn hardhat clean",
     "test": "yarn hardhat test",
     "coverage": "yarn hardhat coverage",
-    "start": "yarn hardhat node &",
+    "start": "yarn hardhat node",
     "deploy": "yarn hardhat run --network localhost scripts/deploy.ts"
   },
   "devDependencies": {
