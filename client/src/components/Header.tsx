@@ -18,7 +18,25 @@ const Header = () => {
     >
       <LinkBox>
         <NextLink href={"/"} passHref>
-          <Heading size="md">{siteTitle}</Heading>
+          <Heading size="md">{"Marketplace"}</Heading>
+        </NextLink>
+      </LinkBox>
+      <Spacer />
+      <LinkBox>
+        <NextLink href={"/create-item"} passHref>
+          <Heading size="md">{"Mint"}</Heading>
+        </NextLink>
+      </LinkBox>
+      <Spacer />
+      <LinkBox>
+        <NextLink href={"/my-nfts"} passHref>
+          <Heading size="md">{"My NFTs"}</Heading>
+        </NextLink>
+      </LinkBox>
+      <Spacer />
+      <LinkBox>
+        <NextLink href={"/history"} passHref>
+          <Heading size="md">{"History"}</Heading>
         </NextLink>
       </LinkBox>
       <Spacer />
