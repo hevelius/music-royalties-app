@@ -103,6 +103,14 @@ contract NFTMarket is ReentrancyGuard {
     _itemsSold.increment();
   }
 
+  /* Resell a solded item */
+  function resellMarketItem(address nftContract, uint256 itemId) public payable {
+    IERC721(nftContract).transferFrom(msg.sender, address(this), idToMarketItem[itemId].tokenId);
+    idToMarketItem[itemId].owner = payable(address(0));
+    idToMarketItem[itemId].sold = false;
+    _itemsSold.decrement();
+  }
+
   /**
    * Returns all unsold market items.
    */
