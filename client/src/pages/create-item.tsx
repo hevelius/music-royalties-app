@@ -4,9 +4,8 @@ import { VStack, Heading } from "@chakra-ui/layout";
 import { Button, Image, Input, Textarea } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
-
 import { nftAddress, nftMarketAddress } from "../utils/constants";
-
+import axios from "axios";
 import { NFT__factory as NFT } from "backend/typechain-types";
 import { NFTMarket__factory as Market } from "backend/typechain-types";
 
@@ -14,6 +13,8 @@ declare let window: any;
 
 const CreateItem: NextPage = () => {
   const [fileUrl, setFileUrl] = React.useState("");
+  const [coverImage, setCoverImage] = React.useState<FileList>();
+  const [audioFile, setAudioFile] = React.useState<FileList>();
   const [formInput, updateFormInput] = React.useState({
     price: "",
     name: "",
@@ -28,47 +29,53 @@ const CreateItem: NextPage = () => {
     const { target } = e;
     const { files } = target as HTMLInputElement;
     const file = files ? files[0] : null;
-
-    //const file = e !== undefined ? e.target.files[0]: null;
-    try {
-      /*const added = await client.add(
-        file,
-        {
-          progress: (prog) => console.log(`received: ${prog}`)
-        }
-      )*/
-      //const url = `https://ipfs.infura.io/ipfs/${added.path}`
-      const url = `https://localhost/ipfs/samplepath`;
-      setFileUrl(url);
-      console.log(fileUrl);
-    } catch (error) {
-      console.log("Error uploading file: ", error);
+    console.log(file);
+    if (file !== null) {
+      //const client = create({ host: 'localhost', port: 5001, protocol: 'http' });
+      //const added = await client.add('hello world');
+      //console.log(added);
+      //const url = `https://localhost/ipfs/${added.path}`;
+      //setFileUrl(url);
+      //console.log(url);
     }
   };
 
   const createMarket = async () => {
-    console.log("click");
     const { name, description, price } = formInput;
-    console.log(name);
+    console.log(formInput);
+    if (!name || !description || !price) return;
 
-    if (!name || !description || !price || !fileUrl) return;
     /* first, upload to IPFS */
     const data = JSON.stringify({
       name,
       description,
-      image: fileUrl,
     });
-    console.log(data);
 
-    try {
-      //const added = await client.add(data)
-      //const url = `https://ipfs.infura.io/ipfs/${added.path}`
-      const url = `https://localhost/ipfs/samplepath`;
-      /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
-      createSale(url);
-    } catch (error) {
-      console.log("Error uploading file: ", error);
+    const formData = new FormData();
+    formData.append("data", data);
+    if (coverImage) {
+      formData.append("cover", coverImage[0]);
     }
+    if (audioFile) {
+      formData.append("audio", audioFile[0]);
+    }
+    axios
+      .post("http://127.0.0.1:5000/uploader", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "*",
+          "Access-Control-Allow-Credentials": "true",
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+        const url = `https://ipfs.io/ipfs/${response.data}`;
+        createSale(url);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const createSale = async (url: string) => {
@@ -140,12 +147,19 @@ const CreateItem: NextPage = () => {
         />
         <Input
           type="file"
-          name="Asset"
+          name="Cover image"
           accept="image/png, image/gif, image/jpeg"
           size="md"
-          onChange={onChange}
+          onChange={(e) => setCoverImage(e.target.files as FileList)}
         />
-        {fileUrl && <Image src={fileUrl} alt={"file to upload"}/>}
+        <Input
+          type="file"
+          name="Audio file"
+          accept="audio/*"
+          size="md"
+          onChange={(e) => setAudioFile(e.target.files as FileList)}
+        />
+        {fileUrl && <Image src={fileUrl} alt={"file to upload"} />}
         <Button onClick={createMarket}>Create and List NFT</Button>
         <p> Transaction {awaitingConfirmation} of 2 processing... </p>
       </VStack>

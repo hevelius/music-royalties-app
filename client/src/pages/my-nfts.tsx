@@ -6,7 +6,7 @@ import type { NextPage } from "next";
 import Web3Modal from "web3modal";
 import { useRouter } from "next/router";
 import { nftAddress, nftMarketAddress } from "../utils/constants";
-
+import axios from "axios";
 import { NFTMarket__factory as Market } from "backend/typechain-types";
 import { NFT__factory as NFT } from "backend/typechain-types";
 import Head from "next/head";
@@ -41,7 +41,7 @@ const MyNFTs: NextPage = () => {
     const items = await Promise.all(
       data.map(async (i: MarketItemCreatedEventObject) => {
         const tokenUri = await tokenContract.tokenURI(i.tokenId);
-        const meta = "{}"; //await axios.get(tokenUri)
+        const meta = await axios.get(tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           itemId: i.itemId.toNumber(),
@@ -50,14 +50,13 @@ const MyNFTs: NextPage = () => {
           seller: i.seller,
           owner: i.owner,
           sold: i.sold,
-          image: "meta.data.image",
-          name: "meta.data.name",
-          description: "meta.data.description",
+          image: `https://ipfs.io/ipfs/${meta.data.cover}`,
+          name: meta.data.name,
+          description: meta.data.description,
         };
         return item;
       }),
     );
-    console.log(items);
     setNfts(items);
     setLoadingState("loaded");
   };

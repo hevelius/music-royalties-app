@@ -8,6 +8,7 @@ import { NFTMarket__factory as Market } from "backend/typechain-types";
 import { NFT_ITEM_T } from "src/types/nft";
 import NftGrid from "src/components/NftGrid";
 import { MarketItemCreatedEventObject } from "backend/typechain-types/contracts/NFTMarket";
+import axios from "axios";
 
 const Home: NextPage = () => {
   //const [provider, setProvider] = React.useState<ethers.providers.Web3Provider>();
@@ -40,7 +41,7 @@ const Home: NextPage = () => {
     const items = await Promise.all(
       data.map(async (i: MarketItemCreatedEventObject) => {
         const tokenUri = await tokenContract.tokenURI(i.tokenId);
-        const meta = "{}"; //await axios.get(tokenUri)
+        const meta = await axios.get(tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
@@ -48,9 +49,9 @@ const Home: NextPage = () => {
           seller: i.seller,
           owner: i.owner,
           creator: i.creator,
-          image: "meta.data.image",
-          name: "meta.data.name",
-          description: "meta.data.description",
+          image: `https://ipfs.io/ipfs/${meta.data.cover}`,
+          name: meta.data.name,
+          description: meta.data.description,
         };
         console.log(item);
         return item;
