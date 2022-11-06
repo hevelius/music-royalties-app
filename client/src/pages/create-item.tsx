@@ -1,7 +1,7 @@
-import React, { FormEvent } from "react";
+import React from "react";
 import type { NextPage } from "next";
 import { VStack, Heading } from "@chakra-ui/layout";
-import { Button, Image, Input, Textarea } from "@chakra-ui/react";
+import { Button, Input, Textarea } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
 import { nftAddress, nftMarketAddress } from "../utils/constants";
@@ -12,7 +12,6 @@ import { NFTMarket__factory as Market } from "backend/typechain-types";
 declare let window: any;
 
 const CreateItem: NextPage = () => {
-  const [fileUrl, setFileUrl] = React.useState("");
   const [coverImage, setCoverImage] = React.useState<FileList>();
   const [audioFile, setAudioFile] = React.useState<FileList>();
   const [formInput, updateFormInput] = React.useState({
@@ -25,24 +24,8 @@ const CreateItem: NextPage = () => {
   const [awaitingConfirmation, setAwaitingConfirmation] = React.useState(0);
   const router = useRouter();
 
-  const onChange = async (e: FormEvent) => {
-    const { target } = e;
-    const { files } = target as HTMLInputElement;
-    const file = files ? files[0] : null;
-    console.log(file);
-    if (file !== null) {
-      //const client = create({ host: 'localhost', port: 5001, protocol: 'http' });
-      //const added = await client.add('hello world');
-      //console.log(added);
-      //const url = `https://localhost/ipfs/${added.path}`;
-      //setFileUrl(url);
-      //console.log(url);
-    }
-  };
-
   const createMarket = async () => {
     const { name, description, price } = formInput;
-    console.log(formInput);
     if (!name || !description || !price) return;
 
     /* first, upload to IPFS */
@@ -69,7 +52,6 @@ const CreateItem: NextPage = () => {
         },
       })
       .then(function (response) {
-        console.log(response);
         const url = `https://ipfs.io/ipfs/${response.data}`;
         createSale(url);
       })
@@ -87,9 +69,7 @@ const CreateItem: NextPage = () => {
     let transaction = await contract.createToken(url);
     setAwaitingConfirmation(1);
     let tx = await transaction.wait();
-    console.log(tx);
     let event = tx.events[0];
-    console.log(event);
     let value = event.args[2];
     let tokenId = value.toNumber();
     const price = ethers.utils.parseUnits(formInput.price, "ether");
@@ -159,7 +139,6 @@ const CreateItem: NextPage = () => {
           size="md"
           onChange={(e) => setAudioFile(e.target.files as FileList)}
         />
-        {fileUrl && <Image src={fileUrl} alt={"file to upload"} />}
         <Button onClick={createMarket}>Create and List NFT</Button>
         <p> Transaction {awaitingConfirmation} of 2 processing... </p>
       </VStack>

@@ -53,7 +53,6 @@ const Home: NextPage = () => {
           name: meta.data.name,
           description: meta.data.description,
         };
-        console.log(item);
         return item;
       }),
     );
@@ -61,7 +60,6 @@ const Home: NextPage = () => {
   };
 
   const buyNft = async (nft: NFT_ITEM_T) => {
-    console.log(nft);
     const web3Modal = new Web3Modal({
       network: "mainnet",
       cacheProvider: true,
@@ -73,7 +71,6 @@ const Home: NextPage = () => {
 
     /* user will be prompted to pay the asking proces to complete the transaction */
     const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
-    console.log(nft.price.toString());
     const transaction = await contract.createMarketSale(
       nftAddress,
       nft.tokenId,

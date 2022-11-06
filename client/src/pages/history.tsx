@@ -2,7 +2,7 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import type { NextPage } from "next";
-//import axios from "axios";
+import axios from "axios";
 import Web3Modal from "web3modal";
 
 import { nftMarketAddress, nftAddress, CHAIN_ID } from "../utils/constants";
@@ -44,7 +44,7 @@ const History: NextPage = () => {
       const items = await Promise.all(
         data.map(async (i: MarketItemCreatedEventObject) => {
           const tokenUri = await tokenContract.tokenURI(i.tokenId);
-          const meta = "{}"; //await axios.get(tokenUri)
+          const meta = await axios.get(tokenUri);
           let price = ethers.utils.formatUnits(i.price.toString(), "ether");
           let item = {
             price,
@@ -52,9 +52,9 @@ const History: NextPage = () => {
             seller: i.seller,
             owner: i.owner,
             sold: i.sold,
-            image: "meta.data.image",
-            name: "meta.data.name",
-            description: "meta.data.description",
+            image: `https://ipfs.io/ipfs/${meta.data.cover}`,
+            name: meta.data.name,
+            description: meta.data.description,
           };
           return item;
         }),
