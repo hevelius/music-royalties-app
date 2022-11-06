@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import axios from "axios";
 import Web3Modal from "web3modal";
-
 import { nftMarketAddress, nftAddress, CHAIN_ID } from "../utils/constants";
-
 import { NFTMarket__factory as Market } from "backend/typechain-types";
 import { NFT__factory as NFT } from "backend/typechain-types";
 import { NFT_ITEM_T } from "src/types/nft";

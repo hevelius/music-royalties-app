@@ -4,12 +4,11 @@ import { VStack, Heading } from "@chakra-ui/layout";
 import { Button, Input, Textarea } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useRouter } from "next/router";
+import Web3Modal from "web3modal";
 import { nftAddress, nftMarketAddress } from "../utils/constants";
 import axios from "axios";
 import { NFT__factory as NFT } from "backend/typechain-types";
 import { NFTMarket__factory as Market } from "backend/typechain-types";
-
-declare let window: any;
 
 const CreateItem: NextPage = () => {
   const [coverImage, setCoverImage] = React.useState<FileList>();
@@ -61,9 +60,14 @@ const CreateItem: NextPage = () => {
   };
 
   const createSale = async (url: string) => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const web3Modal = new Web3Modal({
+      network: "mainnet",
+      cacheProvider: true,
+    });
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
     const signer = provider.getSigner();
-
+   
     /* next, create the item */
     let contract = new ethers.Contract(nftAddress, NFT.abi, signer);
     let transaction = await contract.createToken(url);
