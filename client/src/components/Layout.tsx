@@ -10,11 +10,11 @@ const Layout = (props: Props) => {
   return (
     <>
       <Header />
-      <Container maxW="container.md" py="8">
+      <Container maxW="container.xl" py="8">
         {props.children}
       </Container>
       <Center as="footer" bg={useColorModeValue("gray.100", "gray.700")} p={6}>
-        <Text fontSize="md">Hello World DApp</Text>
+        <Text fontSize="md">Music Marketplace with Rental NFT</Text>
       </Center>
     </>
   );

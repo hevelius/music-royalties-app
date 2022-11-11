@@ -38,13 +38,9 @@ const Home: NextPage = () => {
      */
     const items = await Promise.all(
       data.map(async (i: MarketItemCreatedEventObject) => {
-        console.log(i.tokenId.toNumber());
-
         if (i.tokenId.toNumber() !== 0) {
         const tokenUri = await tokenContract.tokenURI(i.tokenId);
-        console.log(tokenUri);
         const meta = await axios.get(tokenUri);
-        console.log(`https://ipfs.io/ipfs/${meta.data.cover}`);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
@@ -76,6 +72,7 @@ const Home: NextPage = () => {
     const transaction = await contract.createMarketSale(
       nftAddress,
       nft.tokenId,
+      days,
       {
         value: price,
       },
@@ -109,7 +106,7 @@ const Home: NextPage = () => {
     return <h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>;
 
   return (
-      <NftGrid nfts={nfts} onPress={buyNft} buttonTitle={"Buy"} />
+      <NftGrid nfts={nfts} onPress={buyNft} buttonTitle={"Buy"} isOnMarketplace/>
   );
 };
 

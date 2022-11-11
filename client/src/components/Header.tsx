@@ -33,13 +33,7 @@ const Header = () => {
           <Heading size="md">{"My NFTs"}</Heading>
         </NextLink>
       </LinkBox>
-      <Spacer />
-      <LinkBox>
-        <NextLink href={"/history"} passHref>
-          <Heading size="md">{"History"}</Heading>
-        </NextLink>
-      </LinkBox>
-      <Spacer />
+      <Spacer />     
     </Flex>
   );
 };

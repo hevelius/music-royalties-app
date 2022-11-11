@@ -1,3 +1,4 @@
+
 export type NFT_ITEM_T = {
     price: string;
     itemId: number;
@@ -8,4 +9,5 @@ export type NFT_ITEM_T = {
     image: string;
     name: string;
     description: string;
+    expires_at: number;
   };

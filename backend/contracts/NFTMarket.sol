@@ -91,7 +91,7 @@ contract NFTMarket is ReentrancyGuard {
     /**
      * Creates a sale for this contract.
      */
-    function createMarketSale(address nftContract, uint256 itemId)
+    function createMarketSale(address nftContract, uint256 itemId, uint256 daysToExpire)
         public
         payable
         nonReentrant
@@ -111,15 +111,8 @@ contract NFTMarket is ReentrancyGuard {
         IERC4907(nftContract).setUser(
             tokenId,
             msg.sender,
-            uint64(block.timestamp + 1 minutes)
+            uint64(block.timestamp + daysToExpire * 1 days)
         );
-        //IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
-        //IERC4907(nftContract).setUser(tokenId, address(this), uint64(block.timestamp + (daysToExpiration * 1 days)));
-
-        // update the market item.
-        //idToMarketItem[itemId].owner = payable(msg.sender);
-        //idToMarketItem[itemId].sold = true;
-        //_itemsSold.increment();
     }
 
     function getUserExpiration(address nftContract, uint256 tokenId)

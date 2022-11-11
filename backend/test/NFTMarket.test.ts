@@ -45,7 +45,7 @@ describe("NFTMarket", function () {
       const auctionPrice = ethers.utils.parseUnits('1', 'ether');
       await nft.createToken("https://www.mytokenlocation.com");
       await market.createMarketItem(nftAddress, 1, auctionPrice, creatorAddress.getAddress(), 10);
-      const results = await market.createMarketSale(nftAddress, 1, { value: auctionPrice });
+      const results = await market.createMarketSale(nftAddress, 1, 1, { value: auctionPrice });
       //console.log(await market.getUserExpiration(nftAddress, 1));
       // Failed require in function
       //await expect(nft.setUser(1, creatorAddress.getAddress(), expirationDatePast, {from: marketAddress})).to.be.revertedWith("ERC721: transfer caller is not owner nor approved");
