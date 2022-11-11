@@ -5,6 +5,9 @@ coverage.json
 typechain
 typechain-types
 
+*.wav
+*.mp3
+
 #Hardhat files
 cache
 artifacts

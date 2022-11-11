@@ -11,11 +11,9 @@ import { MarketItemCreatedEventObject } from "backend/typechain-types/contracts/
 import axios from "axios";
 
 const Home: NextPage = () => {
-  //const [provider, setProvider] = React.useState<ethers.providers.Web3Provider>();
   const [nfts, setNfts] = React.useState<NFT_ITEM_T[]>([]);
 
   React.useEffect(() => {
-    //setProvider(new ethers.providers.Web3Provider(window.ethereum));
     loadNFTs();
   }, []);
 
@@ -32,7 +30,7 @@ const Home: NextPage = () => {
       Market.abi,
       provider,
     );
-    const data = await marketContract.fetchMarketItems();
+    const data = await marketContract.fetchMarketItems(nftAddress);
 
     /*
      *  map over items returned from smart contract and format
@@ -40,26 +38,30 @@ const Home: NextPage = () => {
      */
     const items = await Promise.all(
       data.map(async (i: MarketItemCreatedEventObject) => {
+        console.log(i.tokenId.toNumber());
+
+        if (i.tokenId.toNumber() !== 0) {
         const tokenUri = await tokenContract.tokenURI(i.tokenId);
+        console.log(tokenUri);
         const meta = await axios.get(tokenUri);
+        console.log(`https://ipfs.io/ipfs/${meta.data.cover}`);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
         let item = {
           price,
           tokenId: i.tokenId.toNumber(),
-          seller: i.seller,
-          owner: i.owner,
           creator: i.creator,
           image: `https://ipfs.io/ipfs/${meta.data.cover}`,
           name: meta.data.name,
           description: meta.data.description,
         };
         return item;
+      }
       }),
     );
     setNfts(items);
   };
 
-  const buyNft = async (nft: NFT_ITEM_T) => {
+  const buyNft = async (nft: NFT_ITEM_T, days: number) => {
     const web3Modal = new Web3Modal({
       network: "mainnet",
       cacheProvider: true,
@@ -106,7 +108,9 @@ const Home: NextPage = () => {
   if (!nfts.length)
     return <h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>;
 
-  return <NftGrid nfts={nfts} onPress={buyNft} buttonTitle={"Buy"} />;
+  return (
+      <NftGrid nfts={nfts} onPress={buyNft} buttonTitle={"Buy"} />
+  );
 };
 
 export default Home;

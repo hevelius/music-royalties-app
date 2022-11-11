@@ -1,6 +1,9 @@
 {
     "name": "hardhat-dapp-hello-world",
     "private": true,
+    "scripts": {
+        "start": "hardhat node"
+    },
     "workspaces": {
         "packages": [
             "backend",
