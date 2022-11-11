@@ -7,7 +7,6 @@ import {
   LinkBox,
 } from "@chakra-ui/react";
 
-const siteTitle = "HelloWorld DApp";
 const Header = () => {
   return (
     <Flex
