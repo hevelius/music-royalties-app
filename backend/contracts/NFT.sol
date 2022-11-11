@@ -4,15 +4,14 @@ pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import './ERC4907.sol';
 
-contract NFT is ERC721URIStorage {
+contract NFT is ERC4907 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     address contractAddress;
 
-    constructor(address marketplaceAddress) ERC721("musicroyalties", "MRY") {
+    constructor(address marketplaceAddress) ERC4907("MusicRoyalties", "MRY") {
         contractAddress = marketplaceAddress;
     }
 
@@ -24,5 +23,9 @@ contract NFT is ERC721URIStorage {
         _setTokenURI(newItemId, tokenURI);
         setApprovalForAll(contractAddress, true);
         return newItemId;
+    }
+
+    function burn(uint256 tokenId) public {
+        _burn(tokenId);
     }
 }
