@@ -1,5 +1,5 @@
-# HARDHAT HELLO WORLD
-A sample DApp using hardhat typescript and nextjs
+# MUSIC ROYALTIES DAPP NFT MARKETPLACE
+A sample DApp using hardhat typescript and nextjs.
 
 ![example workflow](https://github.com/hevelius/music-royalties-dapp/actions/workflows/node.yml/badge.svg)
 
