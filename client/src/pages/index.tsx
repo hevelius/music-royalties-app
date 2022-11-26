@@ -38,7 +38,6 @@ const Home: NextPage = () => {
      */
     const items = await Promise.all(
       data.map(async (i: MarketItemCreatedEventObject) => {
-        if (i.tokenId.toNumber() !== 0) {
         const tokenUri = await tokenContract.tokenURI(i.tokenId);
         const meta = await axios.get(tokenUri);
         let price = ethers.utils.formatUnits(i.price.toString(), "ether");
@@ -51,7 +50,6 @@ const Home: NextPage = () => {
           description: meta.data.description,
         };
         return item;
-      }
       }),
     );
     setNfts(items);
