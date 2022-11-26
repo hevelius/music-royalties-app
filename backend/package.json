@@ -8,6 +8,7 @@
     "clean": "yarn hardhat clean",
     "test": "yarn hardhat test",
     "coverage": "yarn hardhat coverage",
+    "diagram": "yarn sol2uml class ./contracts -f png -o ./diagrams/class.png",
     "start": "yarn hardhat node &",
     "deploy": "yarn hardhat run --network localhost scripts/deploy.ts"
   },
@@ -35,6 +36,7 @@
     "typescript": ">=4.5.0"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.7.3"
+    "@openzeppelin/contracts": "^4.7.3",
+    "sol2uml": "^2.2.6"
   }
 }
