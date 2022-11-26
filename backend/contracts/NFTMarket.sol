@@ -15,8 +15,6 @@ contract NFTMarket is ReentrancyGuard {
     using SafeMath for uint256;
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
-    Counters.Counter private _itemsSold;
-    Counters.Counter private _mintedItemIds;
 
     address payable owner;
 
@@ -41,15 +39,6 @@ contract NFTMarket is ReentrancyGuard {
         uint256 price,
         uint256 royaltyPercent
     );
-
-    struct PersonalItem {
-        uint itemId;
-        address nftContract;
-        uint256 tokenId;
-        address payable owner;
-    }
-
-    mapping(uint256 => PersonalItem) private idToPersonalItem;
 
     /**
      * Creates a new market item.
