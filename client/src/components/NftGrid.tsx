@@ -40,7 +40,7 @@ const NftGrid = (props: Props) => {
             </Box>
             <Box p="1">{nft.name}</Box>
             <Box p="1">{nft.description}</Box>
-            <Box p="2">{nft.price} x day</Box>
+            <Box p="2">{nft.price} eth/day</Box>
             {props.isOnMarketplace ? (
               <>
                 <NumberInput
@@ -69,7 +69,7 @@ const NftGrid = (props: Props) => {
                   {props.buttonTitle}
                 </Button>
               </>
-            ) : (<Box p="2">{`Valido fino al ${new Date(nft.expires_at * 1000).toLocaleDateString()}`}</Box>)}
+            ) : (<Box p="2">{`Valido fino al ${new Date(nft.expires_at * 1000).toLocaleDateString("it-IT")}`}</Box>)}
           </Box>
         </GridItem>
       ))}

@@ -1,5 +1,4 @@
 import uuid
-import sys
 import numpy as np
 
 from simple_settings import LazySettings

@@ -85,7 +85,7 @@ contract NFTMarket is ReentrancyGuard {
         payable
         nonReentrant
     {
-        uint price = idToMarketItem[itemId].price;
+        uint price = idToMarketItem[itemId].price*daysToExpire;
         uint tokenId = idToMarketItem[itemId].tokenId;
         require(
             msg.value == price,

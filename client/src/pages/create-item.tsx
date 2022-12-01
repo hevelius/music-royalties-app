@@ -112,7 +112,7 @@ const CreateItem: NextPage = () => {
           }
         />
         <Input
-          placeholder="Asset Price in wei"
+          placeholder="Asset Price in ether"
           onChange={(e) =>
             updateFormInput({ ...formInput, price: e.target.value })
           }

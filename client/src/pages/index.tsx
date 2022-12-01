@@ -1,7 +1,7 @@
 import React from "react";
 import type { NextPage } from "next";
 import Web3Modal from "web3modal";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { nftAddress, nftMarketAddress } from "../utils/constants";
 import { NFT__factory as NFT } from "backend/typechain-types";
 import { NFTMarket__factory as Market } from "backend/typechain-types";
@@ -65,14 +65,16 @@ const Home: NextPage = () => {
     const signer = provider.getSigner();
     const contract = new ethers.Contract(nftMarketAddress, Market.abi, signer);
 
+
     /* user will be prompted to pay the asking proces to complete the transaction */
     const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+
     const transaction = await contract.createMarketSale(
       nftAddress,
       nft.tokenId,
       days,
       {
-        value: price,
+        value: price.mul(BigNumber.from(days)),
       },
     );
     await transaction.wait();
