@@ -81,27 +81,6 @@ const Home: NextPage = () => {
     loadNFTs();
   };
 
-  /*const getProvider = () =>
-    pipe(provider, O.fromNullable);
-
-  const onClickHelloWorld = async () => {
-    pipe(
-      getProvider(),
-      O.map((_) => HelloWorld.connect(contractAddress, _)),
-      O.chainNullableK((helloContract) => helloContract.getHelloWorld()),
-      O.chainNullableK((_) => _.then((result) => setHelloText(result))),
-    );
-  };
-
-  const onClickSetHelloWorld = async () => {
-    pipe(
-      getProvider(),
-      O.map((_) => HelloWorld.connect(contractAddress, _.getSigner())),
-      O.chainNullableK((helloContract) => helloContract.setHelloWorld(value)),
-    );
-  };
-  */
-
   if (!nfts.length)
     return <h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>;
 
