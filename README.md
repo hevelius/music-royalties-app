@@ -14,8 +14,8 @@ A sample DApp using hardhat typescript and nextjs.
 ```yarn workspace backend hardhat node```
 
 ## Compile and deploy
-```yarn workspace backend compile```
-```yarn workspace backend deploy```
+* ```yarn workspace backend compile```
+* ```yarn workspace backend deploy```
 
 ## Run ipfs
 ```ipfs daemon --offline```
